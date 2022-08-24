@@ -1,2 +1,6 @@
-def create_company(create_company_request):
-    pass
+class CreateCompany:
+    company_repository = None
+    employee_repository = None
+
+    def handle(self, create_company_request):
+        pass
