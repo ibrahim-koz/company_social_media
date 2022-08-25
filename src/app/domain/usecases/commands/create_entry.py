@@ -1,5 +1,5 @@
 class CreateEntry:
-    def __init__(self, entry_factory, entry_repository, employee_repository):
+    def __init__(self, entry_repository, entry_factory, employee_repository):
         self.entry_factory = entry_factory
         self.entry_repository = entry_repository
         self.employee_repository = employee_repository

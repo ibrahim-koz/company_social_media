@@ -1,7 +1,7 @@
 class Employee:
     def __init__(self, id, name, salary, company_id, entries=None):
         if entries is None:
-            entries = []
+            entries = set()
         self.id = id
         self.name = name
         self.salary = salary
@@ -9,11 +9,10 @@ class Employee:
         self.entries = entries
 
     def add_entry(self, entry_id):
-        self.entries.append(entry_id)
+        self.entries.add(entry_id)
 
     def has_entry(self, entry_id):
-        try:
-            self.entries.index(entry_id)
-            return True
-        except ValueError:
-            return False
+        return entry_id in self.entries
+
+    def remove_entry(self, entry_id):
+        self.entries.remove(entry_id)

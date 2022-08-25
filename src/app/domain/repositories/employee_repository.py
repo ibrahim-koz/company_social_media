@@ -10,3 +10,6 @@ class EmployeeRepository:
 
     def update(self, employee):
         pass
+
+    def remove(self, id):
+        pass

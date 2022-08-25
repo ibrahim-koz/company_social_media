@@ -1,6 +1,6 @@
 class CreateEmployee:
-    def __init__(self, employee_repo, employee_factory, company_repo):
-        self.employee_repo = employee_repo
+    def __init__(self, employee_repository, employee_factory, company_repo):
+        self.employee_repository = employee_repository
         self.employee_factory = employee_factory
         self.company_repo = company_repo
 
@@ -10,7 +10,7 @@ class CreateEmployee:
         company_id = create_employee_request.company_id
 
         new_employee = self.employee_factory.create(name, salary, company_id)
-        self.employee_repo.add(new_employee)
+        self.employee_repository.add(new_employee)
 
         company = self.company_repo.get_company_by_id(company_id)
         company.add_employee(new_employee.id)

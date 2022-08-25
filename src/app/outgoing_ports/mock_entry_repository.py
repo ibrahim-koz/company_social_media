@@ -20,3 +20,9 @@ class MockEntryRepository(EntryRepository):
 
     def update(self, entry):
         self.entries[entry.id] = entry
+
+    def remove(self, id):
+        try:
+            del self.entries[id]
+        except KeyError:
+            raise EntryNotFoundException()

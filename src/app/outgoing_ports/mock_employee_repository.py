@@ -20,3 +20,9 @@ class MockEmployeeRepository(EmployeeRepository):
 
     def update(self, employee):
         self.employees[employee.id] = employee
+
+    def remove_all(self, id):
+        try:
+            del self.employees[id]
+        except KeyError:
+            raise EmployeeNotFoundException()

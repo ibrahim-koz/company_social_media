@@ -31,7 +31,7 @@ def create_entry_fixture():
     create_employee = CreateEmployee(employee_repository, employee_factory, company_repository)
     create_employee.handle(CreateEmployeeRequest(name="Employee", salary=1000, company_id=1))
 
-    create_entry = CreateEntry(entry_factory, entry_repository, employee_repository)
+    create_entry = CreateEntry(entry_repository, entry_factory, employee_repository)
     return create_entry, entry_repository, employee_repository
 
 
