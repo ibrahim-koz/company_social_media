@@ -1,3 +1,4 @@
+from src.app.domain.exceptions.company_not_found_exception import CompanyNotFoundException
 from src.app.domain.repositories.company_repository import CompanyRepository
 
 
@@ -9,7 +10,10 @@ class MockCompanyRepository(CompanyRepository):
         self.companies[company.id] = company
 
     def get_company_by_id(self, id):
-        return self.companies[id]
+        try:
+            return self.companies[id]
+        except KeyError:
+            raise CompanyNotFoundException()
 
     def filter(self, function):
-        return [function(company) for company in self.companies.values()]
+        return list(filter(function, self.companies.values()))

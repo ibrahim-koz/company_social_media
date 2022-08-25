@@ -7,3 +7,6 @@ class CompanyRepository:
 
     def filter(self, function):
         pass
+
+    def update(self, company):
+        pass
