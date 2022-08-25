@@ -20,3 +20,9 @@ class MockCompanyRepository(CompanyRepository):
 
     def update(self, company):
         self.companies[company.id] = company
+
+    def remove(self, id):
+        try:
+            del self.companies[id]
+        except KeyError:
+            raise CompanyNotFoundException()

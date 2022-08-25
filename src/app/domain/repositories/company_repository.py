@@ -10,3 +10,6 @@ class CompanyRepository:
 
     def update(self, company):
         pass
+
+    def remove(self, id):
+        pass
