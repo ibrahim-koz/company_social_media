@@ -7,3 +7,6 @@ class EmployeeRepository:
 
     def filter(self, function):
         pass
+
+    def update(self, employee):
+        pass

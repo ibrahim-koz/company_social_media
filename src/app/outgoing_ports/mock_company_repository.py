@@ -17,3 +17,6 @@ class MockCompanyRepository(CompanyRepository):
 
     def filter(self, function):
         return list(filter(function, self.companies.values()))
+
+    def update(self, company):
+        self.companies[company.id] = company
