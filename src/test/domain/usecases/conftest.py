@@ -18,27 +18,39 @@ from src.app.utils.id_generator import IdGenerator
 @pytest.fixture
 def setup_mock_repositories():
     company_repository = MockCompanyRepository()
-    company_factory = CompanyFactory(IdGenerator())
+    create_company = CreateCompany(company_repository, CompanyFactory(IdGenerator()))
 
-    create_company = CreateCompany(company_repository, company_factory)
     create_company_request = CreateCompanyRequest(name="Company")
-
     create_company.handle(create_company_request)
 
     create_company_request = CreateCompanyRequest(name="Company2")
-
     create_company.handle(create_company_request)
 
     employee_repository = MockEmployeeRepository()
     create_employee = CreateEmployee(employee_repository, EmployeeFactory(IdGenerator()), company_repository)
-    create_employee_request = CreateEmployeeRequest(name="Employee", salary=1000, company_id=1)
 
+    create_employee_request = CreateEmployeeRequest(name="Employee", salary=1000, company_id=1)
+    create_employee.handle(create_employee_request)
+
+    create_employee_request = CreateEmployeeRequest(name="Employee51", salary=4000, company_id=1)
+    create_employee.handle(create_employee_request)
+
+    create_employee_request = CreateEmployeeRequest(name="Employee72", salary=5000, company_id=2)
     create_employee.handle(create_employee_request)
 
     entry_repository = MockEntryRepository()
     create_entry = CreateEntry(entry_repository, EntryFactory(IdGenerator()), employee_repository)
-    create_entry_request = CreateEntryRequest(title="Title", content="Content", employee_id=1)
 
+    create_entry_request = CreateEntryRequest(title="Title", content="Content", employee_id=1)
+    create_entry.handle(create_entry_request)
+
+    create_entry_request = CreateEntryRequest(title="Title23", content="Content32", employee_id=1)
+    create_entry.handle(create_entry_request)
+
+    create_entry_request = CreateEntryRequest(title="Title32", content="Content41", employee_id=1)
+    create_entry.handle(create_entry_request)
+
+    create_entry_request = CreateEntryRequest(title="Title34", content="Content09", employee_id=2)
     create_entry.handle(create_entry_request)
 
     return company_repository, employee_repository, entry_repository
