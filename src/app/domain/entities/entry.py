@@ -21,5 +21,5 @@ class Entry:
         return self.date == other.date
 
     def __lt__(self, other):
-        format = '%Y-%m-%d %H:%M:%S'
-        return datetime.strptime(self.date, format) < datetime.strptime(other.date, format)
+        date_format = '%Y-%m-%d %H:%M:%S'
+        return datetime.strptime(self.date, date_format) < datetime.strptime(other.date, date_format)
