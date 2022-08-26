@@ -15,7 +15,6 @@ class Company(models.Model):
 
     def change_name(self, name):
         self.name = name
-        self.save()
 
 
 class Employee(models.Model):
@@ -34,15 +33,12 @@ class Employee(models.Model):
 
     def change_name(self, name):
         self.name = name
-        self.save()
 
     def change_salary(self, salary):
         self.salary = salary
-        self.save()
 
-    def change_company_id(self, company_id):
-        self.company_id = company_id
-        self.save()
+    def change_company(self, company_id):
+        self.company = Company.objects.get(id=company_id)
 
 
 class Entry(models.Model):
@@ -53,8 +49,6 @@ class Entry(models.Model):
 
     def change_title(self, title):
         self.title = title
-        self.save()
 
     def change_content(self, content):
         self.content = content
-        self.save()

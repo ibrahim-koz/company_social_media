@@ -1,5 +1,3 @@
-from src.app.domain.requests.delete_employee_request import DeleteEmployeeRequest
-from src.app.domain.requests.delete_entry_request import DeleteEntryRequest
 from functools import reduce
 
 
@@ -53,53 +51,30 @@ class CreateEntry:
 
 
 class DeleteCompany:
-    def __init__(self, company_repository, delete_employee):
+    def __init__(self, company_repository):
         self.company_repository = company_repository
-        self.delete_employee = delete_employee
 
     def handle(self, delete_company_request):
         id = delete_company_request.id
-        company = self.company_repository.get_company_by_id(id)
-        employee_ids = company.employees
-
-        delete_employee_requests = [DeleteEmployeeRequest(id) for id in employee_ids]
-        for request in delete_employee_requests:
-            self.delete_employee.handle(request)
         self.company_repository.remove(id)
 
 
 class DeleteEmployee:
-    def __init__(self, company_repository, employee_repository, delete_entry):
+    def __init__(self, employee_repository):
         self.employee_repository = employee_repository
-        self.delete_entry = delete_entry
-        self.company_repository = company_repository
 
     def handle(self, delete_employee_request):
         id = delete_employee_request.id
-        employee = self.employee_repository.get_employee_by_id(id)
-        company = self.company_repository.get_company_by_id(employee.company_id)
-        entry_ids = employee.entries
-
-        delete_entry_requests = [DeleteEntryRequest(id) for id in entry_ids]
-        for delete_entry_request in delete_entry_requests:
-            self.delete_entry.handle(delete_entry_request)
         self.employee_repository.remove(id)
-        company.remove_employee(id)
-        self.company_repository.update(company)
 
 
 class DeleteEntry:
-    def __init__(self, employee_repository, entry_repository):
-        self.employee_repository = employee_repository
+    def __init__(self, entry_repository):
         self.entry_repository = entry_repository
 
     def handle(self, delete_entry_request):
         id = delete_entry_request.id
-        entry = self.entry_repository.get_entry_by_id(id)
-        employee = self.employee_repository.get_employee_by_id(entry.employee_id)
         self.entry_repository.remove(id)
-        employee.remove_entry(id)
-        self.employee_repository.update(employee)
 
 
 class UpdateCompany:
@@ -135,7 +110,7 @@ class UpdateEmployee:
             new_company = self.company_repository.get_company_by_id(company_id)
             old_company.remove_employee(id)
             new_company.add_employee(id)
-            employee.change_company_id(company_id)
+            employee.change_company(new_company)
             self.company_repository.update(old_company)
             self.company_repository.update(new_company)
         self.employee_repository.update(employee)
