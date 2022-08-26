@@ -12,6 +12,6 @@ def read_company_fixture(setup_mock_repositories):
 
 def test_read_company(read_company_fixture):
     read_company = read_company_fixture
-    read_company_request = ReadCompanyRequest(1)
+    read_company_request = ReadCompanyRequest(id=1)
     company = read_company.handle(read_company_request)
     assert company.name == "Company"
