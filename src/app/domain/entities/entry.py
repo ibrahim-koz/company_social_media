@@ -5,3 +5,9 @@ class Entry:
         self.title = title
         self.content = content
         self.date = date
+
+    def change_title(self, title):
+        self.title = title
+
+    def change_content(self, content):
+        self.content = content

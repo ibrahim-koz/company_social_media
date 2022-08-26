@@ -8,8 +8,8 @@ from src.app.domain.usecases.commands.delete_entry import DeleteEntry
 
 
 @pytest.fixture
-def delete_company_fixture(setup_mock_data):
-    company_repository, employee_repository, entry_repository = setup_mock_data
+def delete_company_fixture(setup_mock_repositories):
+    company_repository, employee_repository, entry_repository = setup_mock_repositories
     delete_entry = DeleteEntry(employee_repository, entry_repository)
     delete_employee = DeleteEmployee(company_repository, employee_repository, delete_entry)
     delete_company = DeleteCompany(company_repository, delete_employee)

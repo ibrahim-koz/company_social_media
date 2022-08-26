@@ -16,7 +16,7 @@ from src.app.utils.id_generator import IdGenerator
 
 
 @pytest.fixture
-def setup_mock_data():
+def setup_mock_repositories():
     company_repository = MockCompanyRepository()
     company_factory = CompanyFactory(IdGenerator())
 
