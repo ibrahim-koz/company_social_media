@@ -1,3 +1,8 @@
+from functools import total_ordering
+from datetime import datetime
+
+
+@total_ordering
 class Entry:
     def __init__(self, id, employee_id, title, content, date):
         self.id = id
@@ -11,3 +16,10 @@ class Entry:
 
     def change_content(self, content):
         self.content = content
+
+    def __eq__(self, other):
+        return self.date == other.date
+
+    def __lt__(self, other):
+        format = '%Y-%m-%d %H:%M:%S'
+        return datetime.strptime(self.date, format) < datetime.strptime(other.date, format)

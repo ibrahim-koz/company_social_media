@@ -1,5 +1,6 @@
 import pytest
 
+from src.app.domain.requests.get_feed_request import GetFeedRequest
 from src.app.domain.usecases.queries.get_feed import GetFeed
 
 
@@ -10,6 +11,8 @@ def get_feed_fixture(setup_mock_repositories):
 
 
 def test_get_feed(get_feed_fixture):
+    get_feed = get_feed_fixture
     company_id = 1
-    entries = get_feed_fixture.handle(company_id)
-    assert len(entries) == 3
+    get_feed_request = GetFeedRequest(company_id)
+    entries = get_feed.handle(get_feed_request)
+    assert len(entries) == 5

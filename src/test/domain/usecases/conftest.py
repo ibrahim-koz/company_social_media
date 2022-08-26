@@ -53,4 +53,7 @@ def setup_mock_repositories():
     create_entry_request = CreateEntryRequest(title="Title34", content="Content09", employee_id=2)
     create_entry.handle(create_entry_request)
 
+    create_entry_request = CreateEntryRequest(title="Title35", content="Content82", employee_id=2)
+    create_entry.handle(create_entry_request)
+
     return company_repository, employee_repository, entry_repository
