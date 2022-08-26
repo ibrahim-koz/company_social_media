@@ -25,6 +25,10 @@ def setup_mock_repositories():
 
     create_company.handle(create_company_request)
 
+    create_company_request = CreateCompanyRequest(name="Company2")
+
+    create_company.handle(create_company_request)
+
     employee_repository = MockEmployeeRepository()
     create_employee = CreateEmployee(employee_repository, EmployeeFactory(IdGenerator()), company_repository)
     create_employee_request = CreateEmployeeRequest(name="Employee", salary=1000, company_id=1)

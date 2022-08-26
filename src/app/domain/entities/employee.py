@@ -16,3 +16,12 @@ class Employee:
 
     def remove_entry(self, entry_id):
         self.entries.remove(entry_id)
+
+    def change_name(self, name):
+        self.name = name
+
+    def change_salary(self, salary):
+        self.salary = salary
+
+    def change_company_id(self, company_id):
+        self.company_id = company_id
