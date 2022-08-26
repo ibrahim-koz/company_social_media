@@ -14,3 +14,6 @@ class Company:
 
     def remove_employee(self, employee_id):
         self.employees.remove(employee_id)
+
+    def change_name(self, name):
+        self.name = name
