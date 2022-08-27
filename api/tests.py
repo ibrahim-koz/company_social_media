@@ -99,78 +99,93 @@ class EmployeeTest(TestCase):
         response = c.get(reverse('employee'))
         self.assertEqual(response.status_code, 200)
         json_response = response.json()
-        self.assertEqual(len(json_response), 5)
+        self.assertEqual(len(json_response), 6)
 
 
 class EntryTest(TestCase):
+    fixtures = ['db.json']
+
     def test_entry_creation(self):
-        response = c.post('/entry', {'employee': 1, 'title': 'New Title', 'content': 'New Content'},
+        response = c.post(reverse('entry'), {'title': 'New Title', 'content': 'New Content', 'employee_id': 1},
                           content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
     def test_entry_creation_with_missing_employee(self):
-        response = c.post('/entry', {'employee': 20, 'title': 'New Title', 'content': 'New Content'},
+        response = c.post(reverse('entry'), {'title': 'New Title', 'content': 'New Content', 'employee_id': 8},
                           content_type='application/json')
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
     def test_entry_read(self):
-        response = c.get('/entry/1')
+        response = c.get(reverse('entry') + '/1')
         self.assertEqual(response.status_code, 200)
 
     def test_entry_read_with_missing_id(self):
-        response = c.get('/entry/8')
-        self.assertEqual(response.status_code, 400)
+        response = c.get(reverse('entry') + '/8')
+        self.assertEqual(response.status_code, 404)
 
     def test_entry_update(self):
-        response = c.put('/entry', {'id': 1, 'title': 'Updated Title', 'content': 'Updated Content'},
+        response = c.put(reverse('entry'), {'id': 1, 'title': 'Updated Title', 'content': 'Updated Content'},
                          content_type='application/json')
         json_response = response.json()
-        self.assertEqual(json_response['hours'], 8)
+        self.assertEqual(json_response['title'], 'Updated Title')
+        self.assertEqual(json_response['content'], 'Updated Content')
         self.assertEqual(response.status_code, 200)
 
     def test_entry_update_with_missing_id(self):
-        response = c.put('/entry', {'employee': 1, 'title': 'Updated Title', 'content': 'Updated Content'},
+        response = c.put(reverse('entry'), {'employee_id': 3, 'title': 'Updated Title', 'content': 'Updated Content'},
                          content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
     def test_entry_delete(self):
-        response = c.delete('/entry/1')
+        response = c.delete(reverse('entry') + '/1')
         self.assertEqual(response.status_code, 204)
 
     def test_entry_delete_absent(self):
-        response = c.delete('/entry/8')
-        self.assertEqual(response.status_code, 400)
+        response = c.delete(reverse('entry') + '/8')
+        self.assertEqual(response.status_code, 404)
 
     def test_entry_list(self):
-        response = c.get('/entry')
+        response = c.get(reverse('entry'))
         self.assertEqual(response.status_code, 200)
         json_response = response.json()
-        self.assertEqual(len(json_response), 2)
+        self.assertEqual(len(json_response), 5)
 
 
 class GetFeedTest(TestCase):
     fixtures = ['db.json']
 
     def test_get_feed(self):
-        response = c.get('/feed/1')
+        response = c.get(reverse('feed', args=[2]))
         self.assertEqual(response.status_code, 200)
         json_response = response.json()
-        self.assertEqual(len(json_response), 2)
+        self.assertEqual(len(json_response), 3)
+
+    def test_get_feed_empty_list(self):
+        response = c.get(reverse('feed', args=[1]))
+        self.assertEqual(response.status_code, 200)
+        json_response = response.json()
+        self.assertEqual(len(json_response), 0)
 
     def test_get_feed_with_missing_company_id(self):
-        response = c.get('/feed/8')
-        self.assertEqual(response.status_code, 400)
+        response = c.get(reverse('feed', args=[8]))
+        self.assertEqual(response.status_code, 404)
 
 
 class GetTimelineTest(TestCase):
     fixtures = ['db.json']
 
     def test_get_timeline(self):
-        response = c.get('/timeline/1')
+        response = c.get(reverse('timeline', args=[2]))
         self.assertEqual(response.status_code, 200)
         json_response = response.json()
-        self.assertEqual(len(json_response), 2)
+        self.assertEqual(len(json_response), 1)
+
+    def test_get_timeline_empty_list(self):
+        response = c.get(reverse('timeline', args=[6]))
+        self.assertEqual(response.status_code, 200)
+        json_response = response.json()
+        self.assertEqual(len(json_response), 0)
 
     def test_get_timeline_with_missing_company_id(self):
-        response = c.get('/timeline/8')
-        self.assertEqual(response.status_code, 400)
+        response = c.get(reverse('timeline', args=[8]))
+        self.assertEqual(response.status_code, 404)

@@ -73,6 +73,15 @@
     }
   },
   {
+    "model": "api.employee",
+    "pk": 6,
+    "fields": {
+      "name": "mehmet",
+      "salary": "3000.00",
+      "company": 3
+    }
+  },
+  {
     "model": "api.entry",
     "pk": 1,
     "fields": {

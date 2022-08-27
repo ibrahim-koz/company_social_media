@@ -47,3 +47,6 @@ class EntryRepository:
 
     def update(self, entry):
         entry.save()
+
+    def remove(self, id):
+        return Entry.objects.get(id=id).delete()

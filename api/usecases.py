@@ -147,7 +147,10 @@ class GetFeed:
         company_id = get_feed_request.company_id
         company = self.company_repository.get_company_by_id(company_id)
         employees = company.employees
-        entries = [reduce(lambda x, y: x | y, (employee.entries for employee in employees))][0].order_by('-date')
+        employees_ = [employee.entries for employee in employees]
+        if len(employees_) == 0:
+            return []
+        entries = [reduce(lambda x, y: x | y, employees_)][0].order_by('-date')
         return list(entries)
 
 
