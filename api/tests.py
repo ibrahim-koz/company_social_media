@@ -56,48 +56,50 @@ class EmployeeTest(TestCase):
     fixtures = ['db.json']
 
     def test_employee_creation(self):
-        response = c.post('/employee', {'name': 'john', 'company': 1}, content_type='application/json')
+        response = c.post(reverse('employee'), {'name': 'john', 'company_id': 1, 'salary': 2000},
+                          content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
     def test_employee_creation_with_absent_company(self):
-        response = c.post('/employee', {'name': 'john', 'company': 8}, content_type='application/json')
-        self.assertEqual(response.status_code, 400)
+        response = c.post(reverse('employee'), {'name': 'john', 'company_id': 8, 'salary': 1500},
+                          content_type='application/json')
+        self.assertEqual(response.status_code, 404)
 
     def test_employee_creation_with_missing_name(self):
-        response = c.post('/employee', {'company': 1})
+        response = c.post(reverse('employee'), {'company_id': 1})
         self.assertEqual(response.status_code, 400)
 
     def test_employee_read(self):
-        response = c.get('/employee/1')
+        response = c.get(reverse('employee') + '/1')
         self.assertEqual(response.status_code, 200)
 
     def test_employee_read_with_missing_id(self):
-        response = c.get('/employee/8')
-        self.assertEqual(response.status_code, 400)
+        response = c.get(reverse('employee') + '/8')
+        self.assertEqual(response.status_code, 404)
 
     def test_employee_update(self):
-        response = c.put('/employee', {'id': 1, 'name': 'john', 'company': 1}, content_type='application/json')
+        response = c.put(reverse('employee'), {'id': 1, 'name': 'john'}, content_type='application/json')
         json_response = response.json()
         self.assertEqual(json_response['name'], 'john')
         self.assertEqual(response.status_code, 200)
 
     def test_employee_update_with_missing_id(self):
-        response = c.put('/employee', {'name': 'john', 'company': 1}, content_type='application/json')
+        response = c.put(reverse('employee'), {'name': 'john'}, content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
     def test_employee_delete(self):
-        response = c.delete('/employee/1')
+        response = c.delete(reverse('employee') + '/1')
         self.assertEqual(response.status_code, 204)
 
     def test_employee_delete_absent(self):
-        response = c.delete('/employee/8')
-        self.assertEqual(response.status_code, 400)
+        response = c.delete(reverse('employee') + '/8')
+        self.assertEqual(response.status_code, 404)
 
     def test_employee_list(self):
-        response = c.get('/employee')
+        response = c.get(reverse('employee'))
         self.assertEqual(response.status_code, 200)
         json_response = response.json()
-        self.assertEqual(len(json_response), 2)
+        self.assertEqual(len(json_response), 5)
 
 
 class EntryTest(TestCase):

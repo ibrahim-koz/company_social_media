@@ -102,7 +102,7 @@ class UpdateEmployee:
         id = update_employee_request['id']
         name = update_employee_request.get('name', None)
         salary = update_employee_request.get('salary', None)
-        company_id = update_employee_request.company_id
+        company_id = update_employee_request.get('company_id', None)
         employee = self.employee_repository.get_employee_by_id(id)
         if name is not None:
             employee.change_name(name)
