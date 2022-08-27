@@ -14,11 +14,13 @@ class CompanyView(APIView):
     @swagger_auto_schema(request_body=CreateCompanyRequest, responses={status.HTTP_200_OK: CompanySerializer})
     def post(self, request, *args, **kwargs):
         try:
-            create_company_request = CreateCompanyRequest(data=request.data)
+            request_serializer = CreateCompanyRequest(data=request.data)
+            request_serializer.is_valid(raise_exception=True)
+            create_company_request = request_serializer.validated_data
             company = create_company.handle(create_company_request)
             serializer = CompanySerializer(company)
             return Response(serializer.data)
-        except KeyError as e:
+        except serializers.ValidationError as e:
             return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
 
     @swagger_auto_schema(responses={status.HTTP_200_OK: CompanySerializer(many=True)})
@@ -33,11 +35,13 @@ class CompanyView(APIView):
     @swagger_auto_schema(request_body=UpdateCompanyRequest, responses={status.HTTP_200_OK: CompanySerializer})
     def put(self, request, *args, **kwargs):
         try:
-            update_company_request = UpdateCompanyRequest(data=request.data)
+            request_serializer = UpdateCompanyRequest(data=request.data)
+            request_serializer.is_valid(raise_exception=True)
+            update_company_request = request_serializer.validated_data
             company = update_company.handle(update_company_request)
             serializer = CompanySerializer(company)
             return Response(serializer.data)
-        except KeyError as e:
+        except serializers.ValidationError as e:
             return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
         except Company.DoesNotExist:
             return Response(status=404, data={'error': 'Company not found'})
@@ -45,9 +49,9 @@ class CompanyView(APIView):
 
 class CompanyWithQueryParamView(APIView):
     @swagger_auto_schema(responses={status.HTTP_200_OK: CompanySerializer})
-    def get(self, request, *args, **kwargs):
+    def get(self, request, id, *args, **kwargs):
         try:
-            read_company_request = ReadCompanyRequest(id=request.query_params.get('id'))
+            read_company_request = ReadCompanyRequest(id=id)
             company = read_company.handle(read_company_request)
             serializer = CompanySerializer(company)
             return Response(serializer.data)
@@ -68,11 +72,13 @@ class EmployeeView(APIView):
     @swagger_auto_schema(request_body=CreateEmployeeRequest, responses={status.HTTP_200_OK: EmployeeSerializer})
     def post(self, request, *args, **kwargs):
         try:
-            create_employee_request = CreateEmployeeRequest(data=request.data)
+            request_serializer = CreateEmployeeRequest(data=request.data)
+            request_serializer.is_valid(raise_exception=True)
+            create_employee_request = request_serializer.validated_data
             employee = create_employee.handle(create_employee_request)
             serializer = EmployeeSerializer(employee)
             return Response(serializer.data)
-        except KeyError as e:
+        except serializers.ValidationError as e:
             return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
         except Company.DoesNotExist:
             return Response(status=404, data={'error': 'Company not found'})
@@ -89,11 +95,13 @@ class EmployeeView(APIView):
     @swagger_auto_schema(request_body=UpdateEmployeeRequest, responses={status.HTTP_200_OK: EmployeeSerializer})
     def put(self, request, *args, **kwargs):
         try:
-            update_employee_request = UpdateEmployeeRequest(data=request.data)
+            request_serializer = UpdateEmployeeRequest(data=request.data)
+            request_serializer.is_valid(raise_exception=True)
+            update_employee_request = request_serializer.validated_data
             employee = update_employee.handle(update_employee_request)
             serializer = EmployeeSerializer(employee)
             return Response(serializer.data)
-        except KeyError as e:
+        except serializers.ValidationError as e:
             return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
         except Employee.DoesNotExist:
             return Response(status=404, data={'error': 'Employee not found'})
@@ -101,9 +109,9 @@ class EmployeeView(APIView):
 
 class EmployeeWithQueryParamView(APIView):
     @swagger_auto_schema(responses={status.HTTP_200_OK: EmployeeSerializer})
-    def get(self, request, *args, **kwargs):
+    def get(self, request, id, *args, **kwargs):
         try:
-            read_employee_request = ReadEmployeeRequest(id=request.query_params.get('id'))
+            read_employee_request = ReadEmployeeRequest(id=id)
             employee = read_employee.handle(read_employee_request)
             serializer = EmployeeSerializer(employee)
             return Response(serializer.data)
@@ -124,11 +132,13 @@ class EntryView(APIView):
     @swagger_auto_schema(request_body=CreateEntryRequest, responses={status.HTTP_200_OK: EntrySerializer})
     def post(self, request, *args, **kwargs):
         try:
-            create_entry_request = CreateEntryRequest(data=request.data)
+            request_serializer = CreateEntryRequest(data=request.data)
+            request_serializer.is_valid(raise_exception=True)
+            create_entry_request = request_serializer.validated_data
             entry = create_entry.handle(create_entry_request)
             serializer = EntrySerializer(entry)
             return Response(serializer.data)
-        except KeyError as e:
+        except serializers.ValidationError as e:
             return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
         except Employee.DoesNotExist:
             return Response(status=404, data={'error': 'Employee not found'})
@@ -145,11 +155,13 @@ class EntryView(APIView):
     @swagger_auto_schema(request_body=UpdateEntryRequest, responses={status.HTTP_200_OK: EntrySerializer})
     def put(self, request, *args, **kwargs):
         try:
-            update_entry_request = UpdateEntryRequest(data=request.data)
+            request_serializer = UpdateEntryRequest(data=request.data)
+            request_serializer.is_valid(raise_exception=True)
+            update_entry_request = request_serializer.validated_data
             entry = update_entry.handle(update_entry_request)
             serializer = EntrySerializer(entry)
             return Response(serializer.data)
-        except KeyError as e:
+        except serializers.ValidationError as e:
             return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
         except Entry.DoesNotExist:
             return Response(status=404, data={'error': 'Entry not found'})
@@ -157,9 +169,9 @@ class EntryView(APIView):
 
 class EntryWithQueryParamView(APIView):
     @swagger_auto_schema(responses={status.HTTP_200_OK: EntrySerializer})
-    def get(self, request, *args, **kwargs):
+    def get(self, request, id, *args, **kwargs):
         try:
-            read_entry_request = ReadEntryRequest(id=request.query_params.get('id'))
+            read_entry_request = ReadEntryRequest(id=id)
             entry = read_entry.handle(read_entry_request)
             serializer = EntrySerializer(entry)
             return Response(serializer.data)
