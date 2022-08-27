@@ -111,9 +111,7 @@ class UpdateEmployee:
         if company_id is not None:
             old_company = self.company_repository.get_company_by_id(employee.company_id)
             new_company = self.company_repository.get_company_by_id(company_id)
-            old_company.remove_employee(id)
-            new_company.add_employee(id)
-            employee.change_company(new_company)
+            employee.change_company(new_company.id)
             self.company_repository.save(old_company)
             self.company_repository.save(new_company)
         self.employee_repository.save(employee)

@@ -77,10 +77,18 @@ class EmployeeTest(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_employee_update(self):
-        response = c.put(reverse('employee'), {'id': 1, 'name': 'john'}, content_type='application/json')
+        response = c.put(reverse('employee'), {'id': 1, 'company_id': 4, 'name': 'john'},
+                         content_type='application/json')
         json_response = response.json()
         self.assertEqual(json_response['name'], 'john')
         self.assertEqual(response.status_code, 200)
+        response = c.get(reverse('employee') + '/1')
+        self.assertEqual(response.status_code, 200)
+        response = c.get(reverse('timeline', args=[1]))
+        self.assertEqual(response.status_code, 200)
+        json_response = response.json()
+        self.assertEqual(len(json_response), 1)
+
 
     def test_employee_update_with_missing_id(self):
         response = c.put(reverse('employee'), {'name': 'john'}, content_type='application/json')

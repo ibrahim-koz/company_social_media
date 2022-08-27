@@ -11,9 +11,6 @@ class Company(models.Model):
     def has_employee(self, employee_id):
         return Employee.objects.filter(company=self).filter(id=employee_id).exists()
 
-    def remove_employee(self, employee_id):
-        Employee.objects.filter(company=self).get(id=employee_id).delete()
-
     def change_name(self, name):
         self.name = name
 
