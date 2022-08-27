@@ -1,4 +1,3 @@
-# Create your views here.
 from api.factories import *
 from api.repositories import *
 from api.usecases import *

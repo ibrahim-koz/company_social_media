@@ -1,4 +1,4 @@
-from models import Company, Employee, Entry
+from api.models import Company, Employee, Entry
 
 
 class CompanyRepository:

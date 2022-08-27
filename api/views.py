@@ -1,69 +1,93 @@
-# Create your views here.
-from composition_root import *
-from api.requests import *
+from .composition_root import *
+from .requests import *
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+from .serializers import *
 
 
-def company(request):
-    if request.method == 'POST':
-        create_company_request = CreateCompanyRequest(request.POST)
-        return create_company.handle(create_company_request)
+class CompanyView(APIView):
+    def post(self, request, *args, **kwargs):
+        create_company_request = CreateCompanyRequest(request.data['name'])
+        company = create_company.handle(create_company_request)
+        serializer = CompanySerializer(company)
+        return Response(serializer.data)
 
-    elif request.method == 'DELETE':
-        delete_company_request = DeleteCompanyRequest(request.POST)
-        return delete_company.handle(delete_company_request)
+    def delete(self, request, id, *args, **kwargs):
+        delete_company_request = DeleteCompanyRequest(id)
+        delete_company.handle(delete_company_request)
+        return Response(status=204)
 
-    elif request.method == 'GET':
-        read_company_request = ReadCompanyRequest(request.GET)
-        return read_company.handle(read_company_request)
+    def get(self, request, id, *args, **kwargs):
+        read_company_request = ReadCompanyRequest(id)
+        company = read_company.handle(read_company_request)
+        serializer = CompanySerializer(company)
+        return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        update_company_request = UpdateCompanyRequest(request.POST)
+    def put(self, request, *args, **kwargs):
+        update_company_request = UpdateCompanyRequest(request.data['id'], request.data.get('name', None))
         return update_company.handle(update_company_request)
 
 
-def employee(request):
-    if request.method == 'POST':
-        create_employee_request = CreateEmployeeRequest(request.POST)
-        return create_employee.handle(create_employee_request)
+class EmployeeView(APIView):
+    def post(self, request, *args, **kwargs):
+        create_employee_request = CreateEmployeeRequest(request.data['name'], request.data['salary'],
+                                                        request.data['company_id'])
+        employee = create_employee.handle(create_employee_request)
+        serializer = EmployeeSerializer(employee)
+        return Response(serializer.data)
 
-    elif request.method == 'DELETE':
-        delete_employee_request = DeleteEmployeeRequest(request.POST)
-        return delete_employee.handle(delete_employee_request)
+    def delete(self, request, id, *args, **kwargs):
+        delete_employee_request = DeleteEmployeeRequest(id)
+        delete_employee.handle(delete_employee_request)
+        return Response(status=204)
 
-    elif request.method == 'GET':
-        read_employee_request = ReadEmployeeRequest(request.GET)
-        return read_employee.handle(read_employee_request)
+    def get(self, request, id, *args, **kwargs):
+        read_employee_request = ReadEmployeeRequest(id)
+        employee = read_employee.handle(read_employee_request)
+        serializer = EmployeeSerializer(employee)
+        return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        update_employee_request = UpdateEmployeeRequest(request.POST)
+    def put(self, request, *args, **kwargs):
+        update_employee_request = UpdateEmployeeRequest(request.data['id'], request.data.get('name', None),
+                                                        request.data.get('salary', None),
+                                                        request.data.get('company_id', None))
         return update_employee.handle(update_employee_request)
 
 
-def entry(request):
-    if request.method == 'POST':
-        create_entry_request = CreateEntryRequest(request.POST)
-        return create_entry.handle(create_entry_request)
+class EntryView(APIView):
+    def post(self, request, *args, **kwargs):
+        create_entry_request = CreateEntryRequest(request.data['title'], request.data['content'],
+                                                  request.data['employee_id'])
+        entry = create_entry.handle(create_entry_request)
+        serializer = EntrySerializer(entry)
+        return Response(serializer.data)
 
-    elif request.method == 'DELETE':
-        delete_entry_request = DeleteEntryRequest(request.POST)
-        return delete_entry.handle(delete_entry_request)
+    def delete(self, request, id, *args, **kwargs):
+        delete_entry_request = DeleteEntryRequest(id)
+        delete_entry.handle(delete_entry_request)
+        return Response(status=204)
 
-    elif request.method == 'GET':
-        read_entry_request = ReadEntryRequest(request.GET)
-        return read_entry.handle(read_entry_request)
+    def get(self, request, id, *args, **kwargs):
+        read_entry_request = ReadEntryRequest(id)
+        entry = read_entry.handle(read_entry_request)
+        serializer = EntrySerializer(entry)
+        return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        update_entry_request = UpdateEntryRequest(request.POST)
+    def put(self, request, *args, **kwargs):
+        update_entry_request = UpdateEntryRequest(request.data['id'], request.data.get('title', None),
+                                                  request.data.get('content', None))
         return update_entry.handle(update_entry_request)
 
 
-def feed(request):
-    if request.method == 'GET':
+class FeedView(APIView):
+    def get(self, request, *args, **kwargs):
         read_feed_request = GetFeedRequest(request.GET)
         return read_feed.handle(read_feed_request)
 
 
-def timeline(request):
-    if request.method == 'GET':
+class TimelineView(APIView):
+    def get(self, request, *args, **kwargs):
         read_timeline_request = GetTimelineRequest(request.GET)
         return read_timeline.handle(read_timeline_request)
