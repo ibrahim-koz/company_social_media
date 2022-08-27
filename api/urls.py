@@ -11,7 +11,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path('company', CompanyView.as_view()),
+    path('company', CompanyView.as_view(), name='company'),
     path('company/<int:id>', CompanyWithQueryParamView.as_view()),
     path('employee', EmployeeView.as_view()),
     path('employee/<int:id>', EmployeeWithQueryParamView.as_view()),

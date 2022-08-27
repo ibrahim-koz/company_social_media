@@ -21,7 +21,7 @@ class CompanyView(APIView):
             serializer = CompanySerializer(company)
             return Response(serializer.data)
         except serializers.ValidationError as e:
-            return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
+            return Response(status=400, data={'error': 'Missing parameter: ' + str(e.args[0])})
 
     @swagger_auto_schema(responses={status.HTTP_200_OK: CompanySerializer(many=True)})
     def get(self, request, *args, **kwargs):
@@ -42,7 +42,7 @@ class CompanyView(APIView):
             serializer = CompanySerializer(company)
             return Response(serializer.data)
         except serializers.ValidationError as e:
-            return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
+            return Response(status=400, data={'error': 'Missing parameter: ' + str(e.args[0])})
         except Company.DoesNotExist:
             return Response(status=404, data={'error': 'Company not found'})
 
@@ -78,7 +78,7 @@ class EmployeeView(APIView):
             serializer = EmployeeSerializer(employee)
             return Response(serializer.data)
         except serializers.ValidationError as e:
-            return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
+            return Response(status=400, data={'error': 'Missing parameter: ' + str(e.args[0])})
         except Company.DoesNotExist:
             return Response(status=404, data={'error': 'Company not found'})
 
@@ -101,7 +101,7 @@ class EmployeeView(APIView):
             serializer = EmployeeSerializer(employee)
             return Response(serializer.data)
         except serializers.ValidationError as e:
-            return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
+            return Response(status=400, data={'error': 'Missing parameter: ' + str(e.args[0])})
         except Employee.DoesNotExist:
             return Response(status=404, data={'error': 'Employee not found'})
 
@@ -137,7 +137,7 @@ class EntryView(APIView):
             serializer = EntrySerializer(entry)
             return Response(serializer.data)
         except serializers.ValidationError as e:
-            return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
+            return Response(status=400, data={'error': 'Missing parameter: ' + str(e.args[0])})
         except Employee.DoesNotExist:
             return Response(status=404, data={'error': 'Employee not found'})
 
@@ -160,7 +160,7 @@ class EntryView(APIView):
             serializer = EntrySerializer(entry)
             return Response(serializer.data)
         except serializers.ValidationError as e:
-            return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
+            return Response(status=400, data={'error': 'Missing parameter: ' + str(e.args[0])})
         except Entry.DoesNotExist:
             return Response(status=404, data={'error': 'Entry not found'})
 
