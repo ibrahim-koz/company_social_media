@@ -7,13 +7,6 @@ from rest_framework.response import Response
 from .serializers import *
 
 
-class CompaniesView(APIView):
-    def get(self, request):
-        companies = Company.objects.all()
-        serializer = CompanySerializer(companies, many=True)
-        return Response(serializer.data)
-
-
 class CompanyView(APIView):
     def post(self, request, *args, **kwargs):
         try:
@@ -29,16 +22,21 @@ class CompanyView(APIView):
             delete_company_request = DeleteCompanyRequest(id)
             delete_company.handle(delete_company_request)
             return Response(status=204)
-        except Company.DoesNotExist as e:
+        except Company.DoesNotExist:
             return Response(status=404, data={'error': 'Company not found'})
 
-    def get(self, request, id, *args, **kwargs):
+    def get(self, request, id=None, *args, **kwargs):
         try:
+            if id is None:
+                companies = Company.objects.all()
+                serializer = CompanySerializer(companies, many=True)
+                return Response(serializer.data)
+
             read_company_request = ReadCompanyRequest(id)
             company = read_company.handle(read_company_request)
             serializer = CompanySerializer(company)
             return Response(serializer.data)
-        except Company.DoesNotExist as e:
+        except Company.DoesNotExist:
             return Response(status=404, data={'error': 'Company not found'})
 
     def put(self, request, *args, **kwargs):
@@ -51,13 +49,6 @@ class CompanyView(APIView):
             return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
         except Company.DoesNotExist:
             return Response(status=404, data={'error': 'Company not found'})
-
-
-class EmployeesView(APIView):
-    def get(self, request):
-        employees = Employee.objects.all()
-        serializer = EmployeeSerializer(employees, many=True)
-        return Response(serializer.data)
 
 
 class EmployeeView(APIView):
@@ -81,8 +72,12 @@ class EmployeeView(APIView):
         except Employee.DoesNotExist:
             return Response(status=404, data={'error': 'Employee not found'})
 
-    def get(self, request, id, *args, **kwargs):
+    def get(self, request, id=None, *args, **kwargs):
         try:
+            if id is None:
+                employees = Employee.objects.all()
+                serializer = EmployeeSerializer(employees, many=True)
+                return Response(serializer.data)
             read_employee_request = ReadEmployeeRequest(id)
             employee = read_employee.handle(read_employee_request)
             serializer = EmployeeSerializer(employee)
@@ -102,13 +97,6 @@ class EmployeeView(APIView):
             return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
         except Employee.DoesNotExist:
             return Response(status=404, data={'error': 'Employee not found'})
-
-
-class EntriesView(APIView):
-    def get(self, request):
-        entries = Entry.objects.all()
-        serializer = EntrySerializer(entries, many=True)
-        return Response(serializer.data)
 
 
 class EntryView(APIView):
@@ -134,6 +122,10 @@ class EntryView(APIView):
 
     def get(self, request, id, *args, **kwargs):
         try:
+            if id is None:
+                entries = Entry.objects.all()
+                serializer = EntrySerializer(entries, many=True)
+                return Response(serializer.data)
             read_entry_request = ReadEntryRequest(id)
             entry = read_entry.handle(read_entry_request)
             serializer = EntrySerializer(entry)

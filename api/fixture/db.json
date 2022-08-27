@@ -1,0 +1,125 @@
+[
+  {
+    "model": "api.company",
+    "pk": 1,
+    "fields": {
+      "name": "google"
+    }
+  },
+  {
+    "model": "api.company",
+    "pk": 2,
+    "fields": {
+      "name": "microsoft"
+    }
+  },
+  {
+    "model": "api.company",
+    "pk": 3,
+    "fields": {
+      "name": "apple"
+    }
+  },
+  {
+    "model": "api.company",
+    "pk": 4,
+    "fields": {
+      "name": "meta"
+    }
+  },
+  {
+    "model": "api.employee",
+    "pk": 1,
+    "fields": {
+      "name": "ibrahim",
+      "salary": "2000.00",
+      "company": 3
+    }
+  },
+  {
+    "model": "api.employee",
+    "pk": 2,
+    "fields": {
+      "name": "irem",
+      "salary": "3000.00",
+      "company": 3
+    }
+  },
+  {
+    "model": "api.employee",
+    "pk": 3,
+    "fields": {
+      "name": "hazal",
+      "salary": "3500.00",
+      "company": 3
+    }
+  },
+  {
+    "model": "api.employee",
+    "pk": 4,
+    "fields": {
+      "name": "ahmet",
+      "salary": "2500.00",
+      "company": 2
+    }
+  },
+  {
+    "model": "api.employee",
+    "pk": 5,
+    "fields": {
+      "name": "ali",
+      "salary": "3000.00",
+      "company": 2
+    }
+  },
+  {
+    "model": "api.entry",
+    "pk": 1,
+    "fields": {
+      "title": "title1",
+      "content": "content1",
+      "date": "2022-08-27T11:17:16.379Z",
+      "employee": 1
+    }
+  },
+  {
+    "model": "api.entry",
+    "pk": 2,
+    "fields": {
+      "title": "title2",
+      "content": "content2",
+      "date": "2022-08-27T11:17:17.379Z",
+      "employee": 2
+    }
+  },
+  {
+    "model": "api.entry",
+    "pk": 3,
+    "fields": {
+      "title": "title3",
+      "content": "content3",
+      "date": "2022-08-27T11:17:18.379Z",
+      "employee": 4
+    }
+  },
+  {
+    "model": "api.entry",
+    "pk": 4,
+    "fields": {
+      "title": "title4",
+      "content": "content4",
+      "date": "2022-08-27T11:17:13.379Z",
+      "employee": 4
+    }
+  },
+  {
+    "model": "api.entry",
+    "pk": 4,
+    "fields": {
+      "title": "title5",
+      "content": "content5",
+      "date": "2022-08-27T11:17:12.379Z",
+      "employee": 5
+    }
+  }
+]
