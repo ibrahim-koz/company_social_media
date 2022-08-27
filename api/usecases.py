@@ -109,13 +109,16 @@ class UpdateEmployee:
         if salary is not None:
             employee.change_salary(salary)
         if company_id is not None:
-            old_company = self.company_repository.get_company_by_id(employee.company_id)
-            new_company = self.company_repository.get_company_by_id(company_id)
-            employee.change_company(new_company.id)
-            self.company_repository.save(old_company)
-            self.company_repository.save(new_company)
+            self.change_company(company_id, employee)
         self.employee_repository.save(employee)
         return employee
+
+    def change_company(self, company_id, employee):
+        old_company = self.company_repository.get_company_by_id(employee.company_id)
+        new_company = self.company_repository.get_company_by_id(company_id)
+        employee.change_company(new_company.id)
+        self.company_repository.save(old_company)
+        self.company_repository.save(new_company)
 
 
 class UpdateEntry:

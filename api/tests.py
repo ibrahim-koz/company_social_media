@@ -89,7 +89,6 @@ class EmployeeTest(TestCase):
         json_response = response.json()
         self.assertEqual(len(json_response), 1)
 
-
     def test_employee_update_with_missing_id(self):
         response = c.put(reverse('employee'), {'name': 'john'}, content_type='application/json')
         self.assertEqual(response.status_code, 400)
