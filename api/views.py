@@ -58,7 +58,6 @@ class CompanyWithQueryParamView(APIView):
         except Company.DoesNotExist:
             return Response(status=404, data={'error': 'Company not found'})
 
-    @swagger_auto_schema(responses={status.HTTP_200_OK: CompanySerializer})
     def delete(self, request, id, *args, **kwargs):
         try:
             delete_company_request = DeleteCompanyRequest(id)
@@ -118,7 +117,6 @@ class EmployeeWithQueryParamView(APIView):
         except Employee.DoesNotExist:
             return Response(status=404, data={'error': 'Employee not found'})
 
-    @swagger_auto_schema(responses={status.HTTP_200_OK: EmployeeSerializer})
     def delete(self, request, id, *args, **kwargs):
         try:
             delete_employee_request = DeleteEmployeeRequest(id)
@@ -178,7 +176,6 @@ class EntryWithQueryParamView(APIView):
         except Entry.DoesNotExist:
             return Response(status=404, data={'error': 'Entry not found'})
 
-    @swagger_auto_schema(responses={status.HTTP_200_OK: EntrySerializer})
     def delete(self, request, id, *args, **kwargs):
         try:
             delete_entry_request = DeleteEntryRequest(id)
