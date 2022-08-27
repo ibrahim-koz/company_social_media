@@ -9,7 +9,7 @@ class CreateCompany:
     def handle(self, create_company_request):
         name = create_company_request['name']
         new_company = self.company_factory.create(name)
-        self.company_repository.add(new_company)
+        self.company_repository.save(new_company)
         return new_company
 
 
@@ -27,7 +27,7 @@ class CreateEmployee:
         company = self.company_repo.get_company_by_id(company_id)
         new_employee = self.employee_factory.create(name, salary, company)
 
-        self.employee_repository.add(new_employee)
+        self.employee_repository.save(new_employee)
         return new_employee
 
 
@@ -45,10 +45,10 @@ class CreateEntry:
         employee = self.employee_repository.get_employee_by_id(employee_id)
         new_entry = self.entry_factory.create(title, content, employee)
 
-        self.entry_repository.add(new_entry)
+        self.entry_repository.save(new_entry)
 
         employee.add_entry(new_entry.id)
-        self.employee_repository.update(employee)
+        self.employee_repository.save(employee)
         return new_entry
 
 
@@ -89,7 +89,7 @@ class UpdateCompany:
         company = self.company_repository.get_company_by_id(id)
         if name is not None:
             company.change_name(name)
-        self.company_repository.update(company)
+        self.company_repository.save(company)
         return company
 
 
@@ -114,9 +114,9 @@ class UpdateEmployee:
             old_company.remove_employee(id)
             new_company.add_employee(id)
             employee.change_company(new_company)
-            self.company_repository.update(old_company)
-            self.company_repository.update(new_company)
-        self.employee_repository.update(employee)
+            self.company_repository.save(old_company)
+            self.company_repository.save(new_company)
+        self.employee_repository.save(employee)
         return employee
 
 
@@ -133,7 +133,7 @@ class UpdateEntry:
             entry.change_title(title)
         if content is not None:
             entry.change_content(content)
-        self.entry_repository.update(entry)
+        self.entry_repository.save(entry)
         return entry
 
 
