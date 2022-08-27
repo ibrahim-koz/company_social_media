@@ -12,5 +12,5 @@ class EmployeeFactory:
 
 
 class EntryFactory:
-    def create(self, title, content, date, employee):
-        return Entry(title=title, content=content, date=date, employee=employee)
+    def create(self, title, content, employee):
+        return Entry(title=title, content=content, employee=employee)

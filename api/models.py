@@ -4,8 +4,9 @@ from django.db import models
 class Company(models.Model):
     name = models.CharField(max_length=255)
 
-    def add_employee(self, employee_id):
-        Employee.objects.get(id=employee_id).company = self
+    @property
+    def employees(self):
+        return Employee.objects.filter(company=self)
 
     def has_employee(self, employee_id):
         return Employee.objects.filter(company=self).filter(id=employee_id).exists()
@@ -19,8 +20,12 @@ class Company(models.Model):
 
 class Employee(models.Model):
     name = models.CharField(max_length=255)
-    salary = models.DecimalField(max_digits=10, decimal_places=2)
+    salary = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    @property
+    def entries(self):
+        return Entry.objects.filter(employee=self)
 
     def add_entry(self, entry_id):
         Entry.objects.get(id=entry_id).employee = self

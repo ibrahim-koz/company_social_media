@@ -24,12 +24,10 @@ class CreateEmployee:
         salary = create_employee_request.salary
         company_id = create_employee_request.company_id
 
-        new_employee = self.employee_factory.create(name, salary, company_id)
-        self.employee_repository.add(new_employee)
-
         company = self.company_repo.get_company_by_id(company_id)
-        company.add_employee(new_employee.id)
-        self.company_repo.update(company)
+        new_employee = self.employee_factory.create(name, salary, company)
+
+        self.employee_repository.add(new_employee)
         return new_employee
 
 
@@ -44,10 +42,11 @@ class CreateEntry:
         content = create_entry_request.content
         employee_id = create_entry_request.employee_id
 
-        new_entry = self.entry_factory.create(title, content, employee_id)
+        employee = self.employee_repository.get_employee_by_id(employee_id)
+        new_entry = self.entry_factory.create(title, content, employee)
+
         self.entry_repository.add(new_entry)
 
-        employee = self.employee_repository.get_employee_by_id(employee_id)
         employee.add_entry(new_entry.id)
         self.employee_repository.update(employee)
         return new_entry
@@ -147,10 +146,9 @@ class GetFeed:
     def handle(self, get_feed_request):
         company_id = get_feed_request.company_id
         company = self.company_repository.get_company_by_id(company_id)
-        employees = (self.employee_repository.get_employee_by_id(employee_id) for employee_id in company.employees)
-        entries = sorted([self.entry_repository.get_entry_by_id(entry_id) for entry_id in
-                          reduce(lambda x, y: x | y, (employee.entries for employee in employees))])
-        return entries
+        employees = company.employees
+        entries = [reduce(lambda x, y: x | y, (employee.entries for employee in employees))][0].order_by('-date')
+        return list(entries)
 
 
 class GetTimeline:

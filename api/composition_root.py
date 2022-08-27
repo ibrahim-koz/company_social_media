@@ -25,5 +25,6 @@ delete_entry = DeleteEntry(entry_repository)
 read_entry = ReadEntry(entry_repository)
 update_entry = UpdateEntry(entry_repository)
 
-read_feed = GetFeed(entry_repository, employee_repository, company_repository)
-read_timeline = GetTimeline(entry_repository, employee_repository)
+read_feed = GetFeed(entry_repository=entry_repository, employee_repository=employee_repository,
+                    company_repository=company_repository)
+read_timeline = GetTimeline(entry_repository=entry_repository, employee_repository=employee_repository)

@@ -134,12 +134,22 @@ class EntryView(APIView):
 
 
 class FeedView(APIView):
-    def get(self, request, *args, **kwargs):
-        read_feed_request = GetFeedRequest(request.GET)
-        return read_feed.handle(read_feed_request)
+    def get(self, request, company_id, *args, **kwargs):
+        try:
+            read_feed_request = GetFeedRequest(company_id)
+            feed = read_feed.handle(read_feed_request)
+            serializer = EntrySerializer(feed, many=True)
+            return Response(serializer.data)
+        except Company.DoesNotExist:
+            return Response(status=404, data={'error': 'Company not found'})
 
 
 class TimelineView(APIView):
-    def get(self, request, *args, **kwargs):
-        read_timeline_request = GetTimelineRequest(request.GET)
-        return read_timeline.handle(read_timeline_request)
+    def get(self, request, employee_id, *args, **kwargs):
+        try:
+            read_timeline_request = GetTimelineRequest(employee_id)
+            timeline = read_timeline.handle(read_timeline_request)
+            serializer = EntrySerializer(timeline, many=True)
+            return Response(serializer.data)
+        except Employee.DoesNotExist:
+            return Response(status=404, data={'error': 'Employee not found'})

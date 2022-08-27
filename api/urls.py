@@ -14,6 +14,6 @@ urlpatterns = [
     path('employee/<int:id>', EmployeeView.as_view()),
     path('entry', EntryView.as_view()),
     path('entry/<int:id>', EntryView.as_view()),
-    path('feed', FeedView.as_view()),
-    path('timeline', TimelineView.as_view()),
+    path('feed/<int:company_id>', FeedView.as_view()),
+    path('timeline/<int:employee_id>', TimelineView.as_view()),
 ]
