@@ -1,20 +1,22 @@
-class CreateCompanyRequest:
-    def __init__(self, name):
-        self.name = name
+from abc import ABC
+
+from rest_framework import serializers
 
 
-class CreateEmployeeRequest:
-    def __init__(self, name, salary, company_id):
-        self.name = name
-        self.salary = salary
-        self.company_id = company_id
+class CreateCompanyRequest(serializers.Serializer):
+    name = serializers.CharField()
 
 
-class CreateEntryRequest:
-    def __init__(self, title, content, employee_id):
-        self.title = title
-        self.content = content
-        self.employee_id = employee_id
+class CreateEmployeeRequest(serializers.Serializer):
+    name = serializers.CharField()
+    salary = serializers.IntegerField()
+    company_id = serializers.IntegerField()
+
+
+class CreateEntryRequest(serializers.Serializer):
+    title = serializers.CharField()
+    content = serializers.CharField()
+    employee_id = serializers.IntegerField()
 
 
 class DeleteCompanyRequest:
@@ -57,22 +59,19 @@ class ReadEntryRequest:
         self.id = id
 
 
-class UpdateCompanyRequest:
-    def __init__(self, id, name=None):
-        self.id = id
-        self.name = name
+class UpdateCompanyRequest(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField(required=False)
 
 
-class UpdateEmployeeRequest:
-    def __init__(self, id, name=None, salary=None, company_id=None):
-        self.id = id
-        self.name = name
-        self.salary = salary
-        self.company_id = company_id
+class UpdateEmployeeRequest(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField(required=False)
+    salary = serializers.IntegerField(required=False)
+    company_id = serializers.IntegerField(required=False)
 
 
-class UpdateEntryRequest:
-    def __init__(self, id, title=None, content=None):
-        self.id = id
-        self.title = title
-        self.content = content
+class UpdateEntryRequest(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField(required=False)
+    content = serializers.CharField(required=False)

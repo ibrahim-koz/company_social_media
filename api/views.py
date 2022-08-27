@@ -1,3 +1,6 @@
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
+
 from .composition_root import *
 from .requests import *
 
@@ -8,40 +11,29 @@ from .serializers import *
 
 
 class CompanyView(APIView):
+    @swagger_auto_schema(request_body=CreateCompanyRequest, responses={status.HTTP_200_OK: CompanySerializer})
     def post(self, request, *args, **kwargs):
         try:
-            create_company_request = CreateCompanyRequest(request.data['name'])
+            create_company_request = CreateCompanyRequest(data=request.data)
             company = create_company.handle(create_company_request)
             serializer = CompanySerializer(company)
             return Response(serializer.data)
         except KeyError as e:
             return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
 
-    def delete(self, request, id, *args, **kwargs):
+    @swagger_auto_schema(responses={status.HTTP_200_OK: CompanySerializer(many=True)})
+    def get(self, request, *args, **kwargs):
         try:
-            delete_company_request = DeleteCompanyRequest(id)
-            delete_company.handle(delete_company_request)
-            return Response(status=204)
-        except Company.DoesNotExist:
-            return Response(status=404, data={'error': 'Company not found'})
-
-    def get(self, request, id=None, *args, **kwargs):
-        try:
-            if id is None:
-                companies = Company.objects.all()
-                serializer = CompanySerializer(companies, many=True)
-                return Response(serializer.data)
-
-            read_company_request = ReadCompanyRequest(id)
-            company = read_company.handle(read_company_request)
-            serializer = CompanySerializer(company)
+            companies = Company.objects.all()
+            serializer = CompanySerializer(companies, many=True)
             return Response(serializer.data)
         except Company.DoesNotExist:
             return Response(status=404, data={'error': 'Company not found'})
 
+    @swagger_auto_schema(request_body=UpdateCompanyRequest, responses={status.HTTP_200_OK: CompanySerializer})
     def put(self, request, *args, **kwargs):
         try:
-            update_company_request = UpdateCompanyRequest(request.data['id'], request.data.get('name', None))
+            update_company_request = UpdateCompanyRequest(data=request.data)
             company = update_company.handle(update_company_request)
             serializer = CompanySerializer(company)
             return Response(serializer.data)
@@ -51,11 +43,32 @@ class CompanyView(APIView):
             return Response(status=404, data={'error': 'Company not found'})
 
 
+class CompanyWithQueryParamView(APIView):
+    @swagger_auto_schema(responses={status.HTTP_200_OK: CompanySerializer})
+    def get(self, request, *args, **kwargs):
+        try:
+            read_company_request = ReadCompanyRequest(id=request.query_params.get('id'))
+            company = read_company.handle(read_company_request)
+            serializer = CompanySerializer(company)
+            return Response(serializer.data)
+        except Company.DoesNotExist:
+            return Response(status=404, data={'error': 'Company not found'})
+
+    @swagger_auto_schema(responses={status.HTTP_200_OK: CompanySerializer})
+    def delete(self, request, id, *args, **kwargs):
+        try:
+            delete_company_request = DeleteCompanyRequest(id)
+            delete_company.handle(delete_company_request)
+            return Response(status=204)
+        except Company.DoesNotExist:
+            return Response(status=404, data={'error': 'Company not found'})
+
+
 class EmployeeView(APIView):
+    @swagger_auto_schema(request_body=CreateEmployeeRequest, responses={status.HTTP_200_OK: EmployeeSerializer})
     def post(self, request, *args, **kwargs):
         try:
-            create_employee_request = CreateEmployeeRequest(request.data['name'], request.data['salary'],
-                                                            request.data['company_id'])
+            create_employee_request = CreateEmployeeRequest(data=request.data)
             employee = create_employee.handle(create_employee_request)
             serializer = EmployeeSerializer(employee)
             return Response(serializer.data)
@@ -64,32 +77,19 @@ class EmployeeView(APIView):
         except Company.DoesNotExist:
             return Response(status=404, data={'error': 'Company not found'})
 
-    def delete(self, request, id, *args, **kwargs):
+    @swagger_auto_schema(responses={status.HTTP_200_OK: EmployeeSerializer(many=True)})
+    def get(self, request, *args, **kwargs):
         try:
-            delete_employee_request = DeleteEmployeeRequest(id)
-            delete_employee.handle(delete_employee_request)
-            return Response(status=204)
-        except Employee.DoesNotExist:
-            return Response(status=404, data={'error': 'Employee not found'})
-
-    def get(self, request, id=None, *args, **kwargs):
-        try:
-            if id is None:
-                employees = Employee.objects.all()
-                serializer = EmployeeSerializer(employees, many=True)
-                return Response(serializer.data)
-            read_employee_request = ReadEmployeeRequest(id)
-            employee = read_employee.handle(read_employee_request)
-            serializer = EmployeeSerializer(employee)
+            employees = Employee.objects.all()
+            serializer = EmployeeSerializer(employees, many=True)
             return Response(serializer.data)
         except Employee.DoesNotExist:
             return Response(status=404, data={'error': 'Employee not found'})
 
+    @swagger_auto_schema(request_body=UpdateEmployeeRequest, responses={status.HTTP_200_OK: EmployeeSerializer})
     def put(self, request, *args, **kwargs):
         try:
-            update_employee_request = UpdateEmployeeRequest(request.data['id'], request.data.get('name', None),
-                                                            request.data.get('salary', None),
-                                                            request.data.get('company_id', None))
+            update_employee_request = UpdateEmployeeRequest(data=request.data)
             employee = update_employee.handle(update_employee_request)
             serializer = EmployeeSerializer(employee)
             return Response(serializer.data)
@@ -99,11 +99,32 @@ class EmployeeView(APIView):
             return Response(status=404, data={'error': 'Employee not found'})
 
 
+class EmployeeWithQueryParamView(APIView):
+    @swagger_auto_schema(responses={status.HTTP_200_OK: EmployeeSerializer})
+    def get(self, request, *args, **kwargs):
+        try:
+            read_employee_request = ReadEmployeeRequest(id=request.query_params.get('id'))
+            employee = read_employee.handle(read_employee_request)
+            serializer = EmployeeSerializer(employee)
+            return Response(serializer.data)
+        except Employee.DoesNotExist:
+            return Response(status=404, data={'error': 'Employee not found'})
+
+    @swagger_auto_schema(responses={status.HTTP_200_OK: EmployeeSerializer})
+    def delete(self, request, id, *args, **kwargs):
+        try:
+            delete_employee_request = DeleteEmployeeRequest(id)
+            delete_employee.handle(delete_employee_request)
+            return Response(status=204)
+        except Employee.DoesNotExist:
+            return Response(status=404, data={'error': 'Employee not found'})
+
+
 class EntryView(APIView):
+    @swagger_auto_schema(request_body=CreateEntryRequest, responses={status.HTTP_200_OK: EntrySerializer})
     def post(self, request, *args, **kwargs):
         try:
-            create_entry_request = CreateEntryRequest(request.data['title'], request.data['content'],
-                                                      request.data['employee_id'])
+            create_entry_request = CreateEntryRequest(data=request.data)
             entry = create_entry.handle(create_entry_request)
             serializer = EntrySerializer(entry)
             return Response(serializer.data)
@@ -112,31 +133,19 @@ class EntryView(APIView):
         except Employee.DoesNotExist:
             return Response(status=404, data={'error': 'Employee not found'})
 
-    def delete(self, request, id, *args, **kwargs):
+    @swagger_auto_schema(responses={status.HTTP_200_OK: EmployeeSerializer(many=True)})
+    def get(self, request, *args, **kwargs):
         try:
-            delete_entry_request = DeleteEntryRequest(id)
-            delete_entry.handle(delete_entry_request)
-            return Response(status=204)
-        except Entry.DoesNotExist:
-            return Response(status=404, data={'error': 'Entry not found'})
-
-    def get(self, request, id, *args, **kwargs):
-        try:
-            if id is None:
-                entries = Entry.objects.all()
-                serializer = EntrySerializer(entries, many=True)
-                return Response(serializer.data)
-            read_entry_request = ReadEntryRequest(id)
-            entry = read_entry.handle(read_entry_request)
-            serializer = EntrySerializer(entry)
+            entries = Entry.objects.all()
+            serializer = EntrySerializer(entries, many=True)
             return Response(serializer.data)
         except Entry.DoesNotExist:
             return Response(status=404, data={'error': 'Entry not found'})
 
+    @swagger_auto_schema(request_body=UpdateEntryRequest, responses={status.HTTP_200_OK: EntrySerializer})
     def put(self, request, *args, **kwargs):
         try:
-            update_entry_request = UpdateEntryRequest(request.data['id'], request.data.get('title', None),
-                                                      request.data.get('content', None))
+            update_entry_request = UpdateEntryRequest(data=request.data)
             entry = update_entry.handle(update_entry_request)
             serializer = EntrySerializer(entry)
             return Response(serializer.data)
@@ -146,7 +155,29 @@ class EntryView(APIView):
             return Response(status=404, data={'error': 'Entry not found'})
 
 
+class EntryWithQueryParamView(APIView):
+    @swagger_auto_schema(responses={status.HTTP_200_OK: EntrySerializer})
+    def get(self, request, *args, **kwargs):
+        try:
+            read_entry_request = ReadEntryRequest(id=request.query_params.get('id'))
+            entry = read_entry.handle(read_entry_request)
+            serializer = EntrySerializer(entry)
+            return Response(serializer.data)
+        except Entry.DoesNotExist:
+            return Response(status=404, data={'error': 'Entry not found'})
+
+    @swagger_auto_schema(responses={status.HTTP_200_OK: EntrySerializer})
+    def delete(self, request, id, *args, **kwargs):
+        try:
+            delete_entry_request = DeleteEntryRequest(id)
+            delete_entry.handle(delete_entry_request)
+            return Response(status=204)
+        except Entry.DoesNotExist:
+            return Response(status=404, data={'error': 'Entry not found'})
+
+
 class FeedView(APIView):
+    @swagger_auto_schema(responses={status.HTTP_200_OK: EntrySerializer(many=True)})
     def get(self, request, company_id, *args, **kwargs):
         try:
             read_feed_request = GetFeedRequest(company_id)
@@ -158,6 +189,7 @@ class FeedView(APIView):
 
 
 class TimelineView(APIView):
+    @swagger_auto_schema(responses={status.HTTP_200_OK: EntrySerializer(many=True)})
     def get(self, request, employee_id, *args, **kwargs):
         try:
             read_timeline_request = GetTimelineRequest(employee_id)
