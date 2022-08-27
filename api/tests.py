@@ -5,7 +5,6 @@ from django.urls import reverse
 c = Client()
 
 
-# Create your tests here.
 class CompanyTest(TestCase):
     fixtures = ['db.json']
 
