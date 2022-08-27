@@ -7,6 +7,13 @@ from rest_framework.response import Response
 from .serializers import *
 
 
+class CompaniesView(APIView):
+    def get(self, request):
+        companies = Company.objects.all()
+        serializer = CompanySerializer(companies, many=True)
+        return Response(serializer.data)
+
+
 class CompanyView(APIView):
     def post(self, request, *args, **kwargs):
         try:
@@ -44,6 +51,13 @@ class CompanyView(APIView):
             return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
         except Company.DoesNotExist:
             return Response(status=404, data={'error': 'Company not found'})
+
+
+class EmployeesView(APIView):
+    def get(self, request):
+        employees = Employee.objects.all()
+        serializer = EmployeeSerializer(employees, many=True)
+        return Response(serializer.data)
 
 
 class EmployeeView(APIView):
@@ -88,6 +102,13 @@ class EmployeeView(APIView):
             return Response(status=400, data={'error': 'Missing parameter: ' + e.args[0]})
         except Employee.DoesNotExist:
             return Response(status=404, data={'error': 'Employee not found'})
+
+
+class EntriesView(APIView):
+    def get(self, request):
+        entries = Entry.objects.all()
+        serializer = EntrySerializer(entries, many=True)
+        return Response(serializer.data)
 
 
 class EntryView(APIView):
