@@ -27,7 +27,9 @@ class CompanyView(APIView):
 
     def put(self, request, *args, **kwargs):
         update_company_request = UpdateCompanyRequest(request.data['id'], request.data.get('name', None))
-        return update_company.handle(update_company_request)
+        company = update_company.handle(update_company_request)
+        serializer = CompanySerializer(company)
+        return Response(serializer.data)
 
 
 class EmployeeView(APIView):
@@ -53,7 +55,9 @@ class EmployeeView(APIView):
         update_employee_request = UpdateEmployeeRequest(request.data['id'], request.data.get('name', None),
                                                         request.data.get('salary', None),
                                                         request.data.get('company_id', None))
-        return update_employee.handle(update_employee_request)
+        employee = update_employee.handle(update_employee_request)
+        serializer = EmployeeSerializer(employee)
+        return Response(serializer.data)
 
 
 class EntryView(APIView):
@@ -78,7 +82,9 @@ class EntryView(APIView):
     def put(self, request, *args, **kwargs):
         update_entry_request = UpdateEntryRequest(request.data['id'], request.data.get('title', None),
                                                   request.data.get('content', None))
-        return update_entry.handle(update_entry_request)
+        entry = update_entry.handle(update_entry_request)
+        serializer = EntrySerializer(entry)
+        return Response(serializer.data)
 
 
 class FeedView(APIView):

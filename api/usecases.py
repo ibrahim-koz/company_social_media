@@ -10,6 +10,7 @@ class CreateCompany:
         name = create_company_request.name
         new_company = self.company_factory.create(name)
         self.company_repository.add(new_company)
+        return new_company
 
 
 class CreateEmployee:
@@ -29,6 +30,7 @@ class CreateEmployee:
         company = self.company_repo.get_company_by_id(company_id)
         company.add_employee(new_employee.id)
         self.company_repo.update(company)
+        return new_employee
 
 
 class CreateEntry:
@@ -48,6 +50,7 @@ class CreateEntry:
         employee = self.employee_repository.get_employee_by_id(employee_id)
         employee.add_entry(new_entry.id)
         self.employee_repository.update(employee)
+        return new_entry
 
 
 class DeleteCompany:
@@ -88,6 +91,7 @@ class UpdateCompany:
         if name is not None:
             company.change_name(name)
         self.company_repository.update(company)
+        return company
 
 
 class UpdateEmployee:
@@ -114,6 +118,7 @@ class UpdateEmployee:
             self.company_repository.update(old_company)
             self.company_repository.update(new_company)
         self.employee_repository.update(employee)
+        return employee
 
 
 class UpdateEntry:
@@ -130,6 +135,7 @@ class UpdateEntry:
         if content is not None:
             entry.change_content(content)
         self.entry_repository.update(entry)
+        return entry
 
 
 class GetFeed:
